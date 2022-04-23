@@ -10,10 +10,10 @@
 - [x] Criando as Models
 - [x] Criando o Banco de Dados
 - [x] Criando os Helpers
-- [ ] Listagem de Editora
-- [ ] Cadastro de Editora
-- [ ] Listagem de Livro
-- [ ] Cadastro de Livro
+- [x] Listagem de Editora
+- [x] Cadastro de Editora
+- [x] Listagem de Livro
+- [x] Cadastro de Livro
 
 
 ### Tecnologias
