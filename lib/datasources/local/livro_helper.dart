@@ -59,4 +59,21 @@ class LivroHelper {
 
     return [];
   }
+
+  Future<Livro?> getLivro(int codLivro) async {
+    Database db = await BancoDados().db;
+
+    List dados = await db.query(
+      Livro.tabela,
+      where: '${Livro.codigo_coluna} = ?',
+      whereArgs: [codLivro]
+    );
+
+    if (dados.isNotEmpty) {
+      int codEditora = int.parse(dados.first[Livro.editora_coluna].toString());
+      Editora editora = (await EditoraHelper().getEditora(codEditora))!;
+      return Livro.fromMap(dados.first, editora);
+    }
+    return null;
+  }
 }
