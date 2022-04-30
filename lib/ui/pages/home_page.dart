@@ -45,7 +45,31 @@ class _HomePageState extends State<HomePage> {
       padding: const EdgeInsets.all(4),
       itemCount: listaDados.length,
       itemBuilder: (context, index) {
-        return _criarItemLista(listaDados[index]);
+        return Dismissible(
+          key: UniqueKey(),
+          direction: DismissDirection.horizontal,
+          child: _criarItemLista(listaDados[index]),
+          background: Container(
+            alignment: const Alignment(-1, 0),
+            color: Colors.blue,
+            child: const Text('Editar editora',
+              style: TextStyle(color: Colors.white),),
+          ),
+          secondaryBackground: Container(
+            alignment: const Alignment(1, 0),
+            color: Colors.red,
+            child: const Text('Excluir editora',
+              style: TextStyle(color: Colors.white),),
+          ),
+          onDismissed: (DismissDirection direction) {
+            if (direction == DismissDirection.startToEnd) {
+              _abrirTelaCadastro(editora: listaDados[index]);
+            }
+            else if (direction == DismissDirection.endToStart) {
+              _editoraHelper.apagar(listaDados[index]);
+            }
+          },
+        );
       }
     );
   }
@@ -55,7 +79,11 @@ class _HomePageState extends State<HomePage> {
       child: Card(
         child: Padding(
           padding: const EdgeInsets.all(16),
-          child: Text(editora.nome, style: const TextStyle(fontSize: 28),),
+          child: Row(
+            children: [
+              Text(editora.nome, style: const TextStyle(fontSize: 28),),
+            ],
+          ),
         ),
       ),
       onTap: () => _abrirListaLivros(editora),
