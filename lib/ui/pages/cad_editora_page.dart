@@ -1,6 +1,7 @@
 import 'package:aula_03_pos/datasources/local/editora_helper.dart';
 import 'package:aula_03_pos/models/editora.dart';
 import 'package:aula_03_pos/ui/components/campo_texto.dart';
+import 'package:aula_03_pos/ui/components/mensagem_alerta.dart';
 import 'package:flutter/material.dart';
 
 class CadEditoraPage extends StatefulWidget {
@@ -38,12 +39,60 @@ class _CadEditoraPageState extends State<CadEditoraPage> {
             onPressed: _salvarEditora,
             child: const Text('Salvar')
           ),
+
+          Visibility(
+            child: ElevatedButton(
+                child: const Text('Excluir'),
+                onPressed: _excluirEditora
+            ),
+            visible: widget.editora != null,
+          ),
         ],
       ),
     );
   }
 
+  void _excluirEditora() {
+    MensagemAlerta.show(
+      context: context,
+      titulo: 'Atenção',
+      texto: 'Deseja excluir essa editora?',
+      botoes: [
+        TextButton(
+            child: const Text('Sim'),
+            onPressed: _confirmarExclusao
+        ),
+        ElevatedButton(
+            child: const Text('Não'),
+            onPressed: (){ Navigator.pop(context); }
+        ),
+      ]
+    );
+  }
+
+  void _confirmarExclusao() {
+    if (widget.editora != null) {
+      _editoraHelper.apagar(widget.editora!);
+    }
+    Navigator.pop(context);
+    Navigator.pop(context);
+  }
+
   void _salvarEditora() {
+    if (_nomeController.text.isEmpty) {
+      MensagemAlerta.show(
+        context: context,
+        titulo: 'Atenção',
+        texto: 'Nome da editora é obrigatório!',
+        botoes: [
+          TextButton(
+            child: const Text('Ok'),
+            onPressed: () { Navigator.pop(context); }
+          ),
+        ]
+      );
+      return;
+    }
     if (widget.editora != null) {
       widget.editora!.nome = _nomeController.text;
       _editoraHelper.alterar(widget.editora!);
