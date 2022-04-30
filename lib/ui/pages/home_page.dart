@@ -1,5 +1,6 @@
 import 'package:aula_03_pos/datasources/local/editora_helper.dart';
 import 'package:aula_03_pos/models/editora.dart';
+import 'package:aula_03_pos/ui/components/mensagem_alerta.dart';
 import 'package:aula_03_pos/ui/pages/cad_editora_page.dart';
 import 'package:aula_03_pos/ui/pages/livros_page.dart';
 import 'package:flutter/material.dart';
@@ -68,6 +69,25 @@ class _HomePageState extends State<HomePage> {
             else if (direction == DismissDirection.endToStart) {
               _editoraHelper.apagar(listaDados[index]);
             }
+          },
+          confirmDismiss: (DismissDirection direction) async {
+            if (direction == DismissDirection.endToStart) {
+              return await MensagemAlerta.show(
+                context: context,
+                titulo: 'Atenção',
+                texto: 'Deseja excluir essa editora?',
+                botoes: [
+                  TextButton(
+                    child: const Text('Sim'),
+                    onPressed: (){ Navigator.of(context).pop(true); }
+                  ),
+                  ElevatedButton(
+                    child: const Text('Não'),
+                      onPressed: (){ Navigator.of(context).pop(false); }
+                  ),
+                ]);
+            }
+            return true;
           },
         );
       }
